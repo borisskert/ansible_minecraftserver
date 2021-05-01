@@ -1,0 +1,13 @@
+---
+version: "3.2"
+services:
+  minecraftserver:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft-server
+    environment:
+      EULA: "TRUE"
+    volumes:
+      - /srv/minecraftserver/minecraft-data:/data
+    ports:
+      - 0.0.0.0:25565:25565/tcp
+    restart: unless-stopped

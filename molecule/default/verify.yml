@@ -7,3 +7,25 @@
     - name: Example assertion
       assert:
         that: true
+
+    - name: Should template docker-compose file
+      slurp:
+        src: /opt/minecraftserver/docker/docker-compose.yml
+      register: docker_compose_file
+      failed_when:
+        not docker_compose_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          ---
+          version: "3.2"
+          services:
+            minecraftserver:
+              image: itzg/minecraft-server:latest
+              container_name: minecraft-server
+              environment:
+                EULA: "TRUE"
+              volumes:
+                - /srv/minecraftserver/minecraft-data:/data
+              ports:
+                - 0.0.0.0:25565:25565/tcp
+              restart: unless-stopped

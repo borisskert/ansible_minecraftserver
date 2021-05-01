@@ -1,1 +1,3 @@
 ---
+minecraftserver_docker_working_directory: /opt/minecraftserver/docker
+minecraftserver_docker_compose_path: '{{ minecraftserver_docker_working_directory }}/docker-compose.yml'

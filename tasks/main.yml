@@ -1,1 +1,17 @@
 ---
+- name: create docker working directory
+  file:
+    path: "{{ minecraftserver_docker_working_directory }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: template docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ minecraftserver_docker_compose_path }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart minecraftserver service
