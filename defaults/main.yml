@@ -1,7 +1,14 @@
 ---
+minecraftserver_image_version: latest
+minecraftserver_version: ''
+
+minecraftserver_interface: 0.0.0.0
+minecraftserver_port: 25565
+
 minecraftserver_data_volume_directory: /srv/minecraftserver/minecraft-data
 
 minecraftserver_service_name: minecraftserver
+minecraftserver_container_name: minecraft-server
 
 minecraftserver_docker_working_directory: /opt/minecraftserver/docker
 minecraftserver_docker_compose_path: '{{ minecraftserver_docker_working_directory }}/docker-compose.yml'

@@ -1,0 +1,19 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  tasks:
+    - name: "Include ansible_minecraftserver"
+      include_role:
+        name: "ansible_minecraftserver"
+      vars:
+        minecraftserver_image_version: 2021.11.0
+        minecraftserver_version: 1.7.9
+        minecraftserver_data_volume_directory: /srv/my_minecraftserver/minecraft-data
+        minecraftserver_service_name: my_minecraftserver
+        minecraftserver_container_name: my-minecraft-server
+        minecraftserver_docker_working_directory: /opt/my_minecraftserver/docker
+        minecraftserver_docker_compose_path: /opt/my_minecraftserver/docker/my-docker-compose.yml
+        minecraftserver_interface: 127.0.0.1
+        minecraftserver_port: 35565

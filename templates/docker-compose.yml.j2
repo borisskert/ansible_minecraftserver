@@ -2,12 +2,15 @@
 version: "3.2"
 services:
   minecraftserver:
-    image: itzg/minecraft-server:latest
-    container_name: minecraft-server
+    image: itzg/minecraft-server:{{ minecraftserver_image_version }}
+    container_name: {{ minecraftserver_container_name }}
     environment:
       EULA: "TRUE"
+{% if minecraftserver_version is defined and minecraftserver_version | length > 0 %}
+      VERSION: "{{ minecraftserver_version }}"
+{% endif %}
     volumes:
-      - /srv/minecraftserver/minecraft-data:/data
+      - {{ minecraftserver_data_volume_directory }}:/data
     ports:
-      - 0.0.0.0:25565:25565/tcp
+      - {{ minecraftserver_interface }}:{{ minecraftserver_port }}:25565/tcp
     restart: unless-stopped

@@ -2,34 +2,34 @@
 WantedBy=multi-user.target
 
 [Unit]
-Description=minecraftserver service
+Description={{ minecraftserver_service_name }} service
 After=docker.service
 Requires=docker.service
 
 [Service]
 ExecStartPre=-/usr/local/bin/docker-compose \
-  --project-directory /opt/minecraftserver/docker \
-  --file /opt/minecraftserver/docker/docker-compose.yml \
-  --project-name minecraftserver \
+  --project-directory {{ minecraftserver_docker_working_directory }} \
+  --file {{ minecraftserver_docker_compose_path }} \
+  --project-name {{ minecraftserver_service_name }} \
   down \
   --remove-orphans
 
 ExecStartPre=/usr/local/bin/docker-compose \
-  --project-directory /opt/minecraftserver/docker \
-  --file /opt/minecraftserver/docker/docker-compose.yml \
-  --project-name minecraftserver \
+  --project-directory {{ minecraftserver_docker_working_directory }} \
+  --file {{ minecraftserver_docker_compose_path }} \
+  --project-name {{ minecraftserver_service_name }} \
   pull
 
 ExecStart=/usr/local/bin/docker-compose \
-  --project-directory /opt/minecraftserver/docker \
-  --file /opt/minecraftserver/docker/docker-compose.yml \
-  --project-name minecraftserver \
+  --project-directory {{ minecraftserver_docker_working_directory }} \
+  --file {{ minecraftserver_docker_compose_path }} \
+  --project-name {{ minecraftserver_service_name }} \
   up
 
 ExecStop=/usr/local/bin/docker-compose \
-  --project-directory /opt/minecraftserver/docker \
-  --file /opt/minecraftserver/docker/docker-compose.yml \
-  --project-name minecraftserver \
+  --project-directory {{ minecraftserver_docker_working_directory }} \
+  --file {{ minecraftserver_docker_compose_path }} \
+  --project-name {{ minecraftserver_service_name }} \
   down \
   --remove-orphans
 

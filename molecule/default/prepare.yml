@@ -3,17 +3,23 @@
   hosts: all
   become: true
 
-  roles:
-    - role: install-docker
-      docker_storage_driver: overlay2
-      docker_cleanup_enabled: false
+  tasks:
+    - name: Install docker
+      include_role:
+        name: install-docker
+      vars:
+        docker_storage_driver: overlay2
+        docker_cleanup_enabled: false
       when: not (
         molecule_docker_environment is defined
         and molecule_docker_environment | bool
         )
 
-    - role: install-docker-compose
-      version: 1.29.1
+    - name: Install docker-compose
+      include_role:
+        name: install-docker-compose
+      vars:
+        docker_compose_version: 1.29.1
       when: not (
         molecule_docker_environment is defined
         and molecule_docker_environment | bool
