@@ -1,0 +1,29 @@
+---
+name: Run tests
+
+'on':
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  molecule_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+
+      - name: Run default tests
+        uses: borisskert/molecule-action@v21.04.29
+        with:
+          arguments: test
+
+      - name: Run tests 'all-parameters'
+        uses: borisskert/molecule-action@v21.04.29
+        with:
+          arguments: test --scenario-name all-parameters
