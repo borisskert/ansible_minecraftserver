@@ -76,3 +76,14 @@
           Restart=always
           RestartSec=60s
           TimeoutSec=3600
+
+    - name: Should create data volume
+      stat:
+        path: /srv/minecraftserver/minecraft-data
+      register: data_volume_directory
+      failed_when: not (
+        data_volume_directory.stat.exists
+        and data_volume_directory.stat.uid == 1000
+        and data_volume_directory.stat.gid == 1000
+        and data_volume_directory.stat.mode == '0750'
+        )

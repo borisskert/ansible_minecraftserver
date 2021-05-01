@@ -1,4 +1,6 @@
 ---
+minecraftserver_data_volume_directory: /srv/minecraftserver/minecraft-data
+
 minecraftserver_service_name: minecraftserver
 
 minecraftserver_docker_working_directory: /opt/minecraftserver/docker

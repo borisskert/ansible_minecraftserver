@@ -26,3 +26,11 @@
     mode: 0644
   notify:
     - Restart minecraftserver service
+
+- name: create data volume directory
+  file:
+    path: "{{ minecraftserver_data_volume_directory }}"
+    state: directory
+    owner: "1000"
+    group: "1000"
+    mode: 0750
