@@ -1,0 +1,20 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+
+  roles:
+    - role: install-docker
+      docker_storage_driver: overlay2
+      docker_cleanup_enabled: false
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )
+
+    - role: install-docker-compose
+      version: 1.29.1
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )

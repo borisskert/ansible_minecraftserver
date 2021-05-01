@@ -33,4 +33,17 @@
     state: directory
     owner: "1000"
     group: "1000"
-    mode: 0750
+    mode: 0777
+
+- name: Start systemd-managed docker containers
+  meta: flush_handlers
+
+- name: Enable/start systemd service (if not started)
+  service:
+    name: "{{ minecraftserver_service_name }}"
+    enabled: true
+    state: started
+  when: not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
+    )

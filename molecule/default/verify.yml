@@ -2,6 +2,7 @@
 - name: Verify
   hosts: all
   gather_facts: false
+  become: true
 
   tasks:
     - name: Example assertion
@@ -85,5 +86,18 @@
         data_volume_directory.stat.exists
         and data_volume_directory.stat.uid == 1000
         and data_volume_directory.stat.gid == 1000
-        and data_volume_directory.stat.mode == '0750'
+        and data_volume_directory.stat.mode == '0777'
+        )
+
+    - name: Should open 25565/tcp port
+      command: nc -z -w1 localhost 25565
+      changed_when: false
+      register: netcat_tcp_25565
+      retries: 300
+      delay: 1
+      until: netcat_tcp_25565 is defined
+        and netcat_tcp_25565.rc == 0
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
         )
