@@ -1,0 +1,38 @@
+[Install]
+WantedBy=multi-user.target
+
+[Unit]
+Description=minecraftserver service
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStartPre=-/usr/local/bin/docker-compose \
+  --project-directory /opt/minecraftserver/docker \
+  --file /opt/minecraftserver/docker/docker-compose.yml \
+  --project-name minecraftserver \
+  down \
+  --remove-orphans
+
+ExecStartPre=/usr/local/bin/docker-compose \
+  --project-directory /opt/minecraftserver/docker \
+  --file /opt/minecraftserver/docker/docker-compose.yml \
+  --project-name minecraftserver \
+  pull
+
+ExecStart=/usr/local/bin/docker-compose \
+  --project-directory /opt/minecraftserver/docker \
+  --file /opt/minecraftserver/docker/docker-compose.yml \
+  --project-name minecraftserver \
+  up
+
+ExecStop=/usr/local/bin/docker-compose \
+  --project-directory /opt/minecraftserver/docker \
+  --file /opt/minecraftserver/docker/docker-compose.yml \
+  --project-name minecraftserver \
+  down \
+  --remove-orphans
+
+Restart=always
+RestartSec=60s
+TimeoutSec=3600

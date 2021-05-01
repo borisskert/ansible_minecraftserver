@@ -7,11 +7,22 @@
     group: root
     mode: 0755
 
-- name: template docker-compose file
+- name: Create docker-compose file
   template:
     src: docker-compose.yml.j2
     dest: "{{ minecraftserver_docker_compose_path }}"
     owner: root
     group: root
     mode: 0644
-  notify: Restart minecraftserver service
+  notify:
+    - Restart minecraftserver service
+
+- name: Create systemd unit file
+  template:
+    src: systemd.service.j2
+    dest: "/etc/systemd/system/{{ minecraftserver_service_name }}.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart minecraftserver service
