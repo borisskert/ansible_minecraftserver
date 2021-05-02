@@ -1,0 +1,26 @@
+---
+- name: Check state of systemd unit file
+  stat:
+    path: "/etc/systemd/system/{{ minecraftserver_service_name }}.service"
+  register: minecraftserver_systemd_unit_file_stat
+
+- name: Disable/stop systemd service (if not stopped)
+  service:
+    name: "{{ minecraftserver_service_name }}"
+    enabled: false
+    state: stopped
+  when: minecraftserver_systemd_unit_file_stat.stat.exists
+    and not (
+      molecule_docker_environment is defined
+      and molecule_docker_environment | bool
+    )
+
+- name: Delete docker working directory
+  file:
+    path: "{{ minecraftserver_docker_working_directory }}"
+    state: absent
+
+- name: Delete systemd unit file
+  file:
+    path: "/etc/systemd/system/{{ minecraftserver_service_name }}.service"
+    state: absent

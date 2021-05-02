@@ -1,4 +1,6 @@
 ---
+minecraftserver_state: present
+
 minecraftserver_image_version: latest
 minecraftserver_version: ''
 

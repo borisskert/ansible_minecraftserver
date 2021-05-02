@@ -1,0 +1,52 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Example assertion
+      assert:
+        that: true
+
+    - name: Should close 25565/tcp port
+      command: nc -z -w1 localhost 25565
+      changed_when: false
+      register: netcat_tcp_25565
+      retries: 300
+      delay: 1
+      until: netcat_tcp_25565 is defined
+      failed_when: netcat_tcp_25565.rc == 0
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )
+
+    - name: Should remove docker-compose file
+      stat:
+        path: /opt/minecraftserver/docker/docker-compose.yml
+      register: docker_compose_file
+      failed_when: docker_compose_file.stat.exists
+
+    - name: Should remove docker working directory
+      stat:
+        path: /opt/minecraftserver/docker
+      register: docker_working_dir
+      failed_when: docker_working_dir.stat.exists
+
+    - name: Should remove systemd unit file
+      stat:
+        path: /etc/systemd/system/minecraftserver.service
+      register: systemd_service_file
+      failed_when: systemd_service_file.stat.exists
+
+    - name: Should keep data volume
+      stat:
+        path: /srv/minecraftserver/minecraft-data
+      register: data_volume_directory
+      failed_when: not (
+        data_volume_directory.stat.exists
+        and data_volume_directory.stat.uid == 1000
+        and data_volume_directory.stat.gid == 1000
+        and data_volume_directory.stat.mode == '0777'
+        )

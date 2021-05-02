@@ -24,10 +24,11 @@ I'm using [itzg's docker image](https://github.com/itzg/docker-minecraft-server)
 
 | Variable      | Type | Mandatory? | Default | Description           |
 |---------------|------|------------|---------|-----------------------|
-| minecraftserver_image_version | text | no | `'latest'` | itzg's Docker image version |
-| minecraftserver_version       | text | no | `''` | Minecraft Server version (e.g. `1.16.5`, default: latest version will be downloaded) |
-| minecraftserver_interface     | text | no | `0.0.0.0` | Mapped network interface |
-| minecraftserver_port          | text | no | `25565`   | Mapped network port |
+| minecraftserver_state         | text | no | `'present'` | If `absent` removes the docker configuration and systemd service |
+| minecraftserver_image_version | text | no | `'latest'`  | itzg's Docker image version |
+| minecraftserver_version       | text | no | `''`        | Minecraft Server version (e.g. `1.16.5`, default: latest version will be downloaded) |
+| minecraftserver_interface     | text | no | `0.0.0.0`   | Mapped network interface |
+| minecraftserver_port          | text | no | `25565`     | Mapped network port |
 | minecraftserver_data_volume_directory | text | no | `/srv/minecraftserver/minecraft-data` | Location of your data volume directory |
 
 ## Example Playbook
@@ -68,7 +69,7 @@ Requirements:
 ### Run within docker
 
 ```shell script
-molecule test && molecule test --scenario-name all-parameters
+molecule test && molecule test --scenario-name all-parameters && molecule test --scenario-name state-absent
 ```
 
 ### Run within Vagrant

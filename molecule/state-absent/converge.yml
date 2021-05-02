@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  tasks:
+    - name: "Include ansible_minecraftserver"
+      include_role:
+        name: "ansible_minecraftserver"
+      vars:
+        minecraftserver_state: absent

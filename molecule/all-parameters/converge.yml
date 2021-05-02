@@ -8,6 +8,7 @@
       include_role:
         name: "ansible_minecraftserver"
       vars:
+        minecraftserver_state: present
         minecraftserver_image_version: 2021.11.0
         minecraftserver_version: 1.7.9
         minecraftserver_data_volume_directory: /srv/my_minecraftserver/minecraft-data
