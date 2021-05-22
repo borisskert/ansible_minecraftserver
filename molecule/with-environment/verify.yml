@@ -1,0 +1,104 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Should template docker-compose file
+      slurp:
+        src: /opt/minecraftserver/docker/docker-compose.yml
+      register: docker_compose_file
+      failed_when:
+        not docker_compose_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          ---
+          version: "3.2"
+          services:
+            minecraftserver:
+              image: itzg/minecraft-server:2021.14.0
+              container_name: minecraft-server
+              environment:
+                EULA: "TRUE"
+                VERSION: "1.16.5"
+                SEED: "1785852800490497919"
+                VIEW_DISTANCE: "10"
+                MODE: "creative"
+                MOTD: "My Server"
+              volumes:
+                - /srv/minecraftserver/minecraft-data:/data
+              ports:
+                - 0.0.0.0:25565:25565/tcp
+              restart: unless-stopped
+
+    - name: Should template systemd unit file
+      slurp:
+        src: /etc/systemd/system/minecraftserver.service
+      register: systemd_service_file
+      failed_when:
+        not systemd_service_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          [Install]
+          WantedBy=multi-user.target
+
+          [Unit]
+          Description=minecraftserver service
+          After=docker.service
+          Requires=docker.service
+
+          [Service]
+          ExecStartPre=-/usr/local/bin/docker-compose \
+            --project-directory /opt/minecraftserver/docker \
+            --file /opt/minecraftserver/docker/docker-compose.yml \
+            --project-name minecraftserver \
+            down \
+            --remove-orphans
+
+          ExecStartPre=/usr/local/bin/docker-compose \
+            --project-directory /opt/minecraftserver/docker \
+            --file /opt/minecraftserver/docker/docker-compose.yml \
+            --project-name minecraftserver \
+            pull
+
+          ExecStart=/usr/local/bin/docker-compose \
+            --project-directory /opt/minecraftserver/docker \
+            --file /opt/minecraftserver/docker/docker-compose.yml \
+            --project-name minecraftserver \
+            up
+
+          ExecStop=/usr/local/bin/docker-compose \
+            --project-directory /opt/minecraftserver/docker \
+            --file /opt/minecraftserver/docker/docker-compose.yml \
+            --project-name minecraftserver \
+            down \
+            --remove-orphans
+
+          Restart=always
+          RestartSec=60s
+          TimeoutSec=3600
+
+    - name: Should create data volume
+      stat:
+        path: /srv/minecraftserver/minecraft-data
+      register: data_volume_directory
+      failed_when: not (
+        data_volume_directory.stat.exists
+        and data_volume_directory.stat.uid == 1000
+        and data_volume_directory.stat.gid == 1000
+        and data_volume_directory.stat.mode == '0777'
+        )
+
+    - name: Should open 25565/tcp port
+      command: nc -z -w1 localhost 25565
+      changed_when: false
+      register: netcat_tcp_25565
+      retries: 300
+      delay: 1
+      until: netcat_tcp_25565 is defined
+        and netcat_tcp_25565.rc == 0
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )

@@ -32,6 +32,7 @@ I'm using [itzg's docker image](https://github.com/itzg/docker-minecraft-server)
 | minecraftserver_interface     | text | no | `0.0.0.0`   | Mapped network interface |
 | minecraftserver_port          | text | no | `25565`     | Mapped network port |
 | minecraftserver_data_volume_directory | text | no | `/srv/minecraftserver/minecraft-data` | Location of your data volume directory |
+| minecraftserver_environement          | key-value map | no | `{}` | Specifies the environment for the docker image (See [itzg's documentation](https://github.com/itzg/docker-minecraft-server)) |
 
 ## Example Playbook
 
@@ -54,6 +55,11 @@ I'm using [itzg's docker image](https://github.com/itzg/docker-minecraft-server)
       minecraftserver_interface: 0.0.0.0
       minecraftserver_port: 25565
       minecraftserver_data_volume_directory: /srv/minecraftserver/minecraft-data
+      minecraftserver_environement:
+        SEED: 1785852800490497919
+        VIEW_DISTANCE: 10
+        MODE: creative
+        MOTD: My super cool MC server
 ```
 
 ## Testing
@@ -71,13 +77,13 @@ Requirements:
 ### Run within docker
 
 ```shell script
-molecule test && molecule test --scenario-name all-parameters && molecule test --scenario-name state-absent
+molecule test && molecule test --scenario-name all-parameters && molecule test --scenario-name state-absent && molecule test --scenario-name with-environment
 ```
 
 ### Run within Vagrant
 
 ```shell script
-molecule test -s vagrant-default && molecule test -s vagrant-all-parameters && molecule test --scenario-name vagrant-state-absent
+molecule test -s vagrant-default && molecule test -s vagrant-all-parameters && molecule test --scenario-name vagrant-state-absent && molecule test --scenario-name vagrant-with-environment
 ```
 
 I recommend to use [pyenv](https://github.com/pyenv/pyenv) for local testing.
