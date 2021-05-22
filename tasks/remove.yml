@@ -19,6 +19,7 @@
   file:
     path: "{{ minecraftserver_docker_working_directory }}"
     state: absent
+  notify: Reload systemd
 
 - name: Delete systemd unit file
   file:

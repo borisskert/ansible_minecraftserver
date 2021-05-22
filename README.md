@@ -22,6 +22,8 @@ I'm using [itzg's docker image](https://github.com/itzg/docker-minecraft-server)
 * Setup systemd unit file
 * Start/Restart systemd service
 
+## Role parameters
+
 | Variable      | Type | Mandatory? | Default | Description           |
 |---------------|------|------------|---------|-----------------------|
 | minecraftserver_state         | text | no | `'present'` | If `absent` removes the docker configuration and systemd service |
@@ -75,7 +77,7 @@ molecule test && molecule test --scenario-name all-parameters && molecule test -
 ### Run within Vagrant
 
 ```shell script
-molecule test -s vagrant-default && molecule test -s vagrant-all-parameters
+molecule test -s vagrant-default && molecule test -s vagrant-all-parameters && molecule test --scenario-name vagrant-state-absent
 ```
 
 I recommend to use [pyenv](https://github.com/pyenv/pyenv) for local testing.

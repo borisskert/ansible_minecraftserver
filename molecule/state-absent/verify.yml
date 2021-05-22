@@ -5,10 +5,6 @@
   become: true
 
   tasks:
-    - name: Example assertion
-      assert:
-        that: true
-
     - name: Should close 25565/tcp port
       command: nc -z -w1 localhost 25565
       changed_when: false

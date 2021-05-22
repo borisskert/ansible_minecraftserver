@@ -5,10 +5,6 @@
   become: true
 
   tasks:
-    - name: Example assertion
-      assert:
-        that: true
-
     - name: Should template docker-compose file
       slurp:
         src: /opt/minecraftserver/docker/docker-compose.yml
