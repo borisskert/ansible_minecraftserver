@@ -28,12 +28,17 @@ jobs:
         with:
           arguments: test --scenario-name all-parameters
 
-      - name: Run tests 'all-parameters'
+      - name: Run tests 'state-absent'
         uses: borisskert/molecule-action@v21.04.29
         with:
           arguments: test --scenario-name state-absent
 
-      - name: Run tests 'all-parameters'
+      - name: Run tests 'with-environment'
         uses: borisskert/molecule-action@v21.04.29
         with:
           arguments: test --scenario-name with-environment
+
+      - name: Run tests 'state-absent-force-remove-persistent-data'
+        uses: borisskert/molecule-action@v21.04.29
+        with:
+          arguments: test --scenario-name state-absent-force-remove-persistent-data

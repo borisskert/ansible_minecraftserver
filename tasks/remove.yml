@@ -25,3 +25,11 @@
   file:
     path: "/etc/systemd/system/{{ minecraftserver_service_name }}.service"
     state: absent
+
+- name: Delete data volume
+  file:
+    path: "{{ minecraftserver_data_volume_directory }}"
+    state: absent
+  when: >
+    minecraftserver_force_remove is defined
+    and minecraftserver_force_remove | bool

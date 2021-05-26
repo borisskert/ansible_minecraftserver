@@ -1,5 +1,6 @@
 ---
 minecraftserver_state: present
+minecraftserver_force_remove: false
 
 minecraftserver_image_version: latest
 minecraftserver_version: ''

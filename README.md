@@ -33,6 +33,7 @@ I'm using [itzg's docker image](https://github.com/itzg/docker-minecraft-server)
 | minecraftserver_port          | text | no | `25565`     | Mapped network port |
 | minecraftserver_data_volume_directory | text | no | `/srv/minecraftserver/minecraft-data` | Location of your data volume directory |
 | minecraftserver_environement          | key-value map | no | `{}` | Specifies the environment for the docker image (See [itzg's documentation](https://github.com/itzg/docker-minecraft-server)) |
+| minecraftserver_force_remove          | boolean | no | `false`    | Only for state `absent`: Specifies if your data volume directory will be deleted on when uninstalling |
 
 ## Example Playbook
 
@@ -50,6 +51,7 @@ I'm using [itzg's docker image](https://github.com/itzg/docker-minecraft-server)
 - hosts: servers
   roles:
     - role: install-minecraftserver
+      minecraftserver_state: present
       minecraftserver_image_version: latest
       minecraftserver_version: '1.16.5'
       minecraftserver_interface: 0.0.0.0
@@ -60,6 +62,16 @@ I'm using [itzg's docker image](https://github.com/itzg/docker-minecraft-server)
         VIEW_DISTANCE: 10
         MODE: creative
         MOTD: My super cool MC server
+```
+
+### Example `playbook.yml` for uninstall:
+
+```yaml
+- hosts: servers
+  roles:
+    - role: install-minecraftserver
+      minecraftserver_state: absent
+      minecraftserver_force_remove: true
 ```
 
 ## Testing
@@ -77,13 +89,13 @@ Requirements:
 ### Run within docker
 
 ```shell script
-molecule test && molecule test --scenario-name all-parameters && molecule test --scenario-name state-absent && molecule test --scenario-name with-environment
+molecule test && molecule test --scenario-name all-parameters && molecule test --scenario-name state-absent && molecule test --scenario-name with-environment && molecule test --scenario-name state-absent-force-remove-persistent-data
 ```
 
 ### Run within Vagrant
 
 ```shell script
-molecule test -s vagrant-default && molecule test -s vagrant-all-parameters && molecule test --scenario-name vagrant-state-absent && molecule test --scenario-name vagrant-with-environment
+molecule test -s vagrant-default && molecule test -s vagrant-all-parameters && molecule test --scenario-name vagrant-state-absent && molecule test --scenario-name vagrant-with-environment && molecule test --scenario-name vagrant-state-absent-force-remove-persistent-data
 ```
 
 I recommend to use [pyenv](https://github.com/pyenv/pyenv) for local testing.
