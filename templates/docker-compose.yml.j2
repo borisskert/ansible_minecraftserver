@@ -9,8 +9,8 @@ services:
 {% if minecraftserver_version is defined and minecraftserver_version | length > 0 %}
       VERSION: "{{ minecraftserver_version }}"
 {% endif %}
-{% if minecraftserver_environement is defined and minecraftserver_environement | length > 0 %}
-{% for key, value in minecraftserver_environement.items() %}
+{% if minecraftserver_environment is defined and minecraftserver_environment | length > 0 %}
+{% for key, value in minecraftserver_environment.items() %}
       {{ key }}: "{{ value }}"
 {% endfor %}
 {% endif %}

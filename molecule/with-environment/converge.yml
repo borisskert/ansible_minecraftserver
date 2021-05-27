@@ -11,7 +11,7 @@
         minecraftserver_state: present
         minecraftserver_image_version: 2021.14.0
         minecraftserver_version: 1.16.5
-        minecraftserver_environement:
+        minecraftserver_environment:
           SEED: 1785852800490497919
           VIEW_DISTANCE: 10
           MODE: creative
