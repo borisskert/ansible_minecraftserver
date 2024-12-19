@@ -3,6 +3,7 @@ dependency:
   name: galaxy
   options:
     role-file: ./molecule/default/requirements.yml
+    force: true
 
 driver:
   name: vagrant
@@ -10,8 +11,20 @@ driver:
     name: libvirt
 
 platforms:
+  - name: ansible-minecraft-noble
+    box: cloud-image/ubuntu-24.04
+  - name: ansible-minecraft-jammy
+    box: cloud-image/ubuntu-22.04
   - name: ansible-minecraft-focal
-    box: generic/ubuntu2004
+    box: cloud-image/ubuntu-20.04
+  - name: ansible-minecraft-bookworm
+    box: cloud-image/debian-12
+    groups:
+      - debian
+  - name: ansible-minecraft-bullseye
+    box: cloud-image/debian-11
+    groups:
+      - debian
 
 provisioner:
   name: ansible

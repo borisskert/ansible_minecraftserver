@@ -9,8 +9,8 @@
         name: "ansible_minecraftserver"
       vars:
         minecraftserver_state: present
-        minecraftserver_image_version: 2021.11.0
-        minecraftserver_version: 1.7.9
+        minecraftserver_image_version: 2024.12.0
+        minecraftserver_version: 1.21.4
         minecraftserver_data_volume_directory: /srv/my_minecraftserver/minecraft-data
         minecraftserver_service_name: my_minecraftserver
         minecraftserver_container_name: my-minecraft-server

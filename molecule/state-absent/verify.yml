@@ -1,8 +1,16 @@
 ---
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
   become: true
+
+  pre_tasks:
+    - name: Install netcat on Debian-based systems (to test open ports)
+      package:
+        name: netcat-traditional
+        state: present
+        update_cache: true
+      when: ansible_distribution == 'Debian'
 
   tasks:
     - name: Should close 25565/tcp port
@@ -12,7 +20,9 @@
       retries: 300
       delay: 1
       until: netcat_tcp_25565 is defined
-      failed_when: netcat_tcp_25565.rc == 0
+      failed_when: netcat_tcp_25565 is defined
+        and (netcat_tcp_25565.rc == 0
+        or netcat_tcp_25565.rc == 2) # nc command not found
       when: not (
         molecule_docker_environment is defined
         and molecule_docker_environment | bool
