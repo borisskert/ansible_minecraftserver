@@ -7,26 +7,26 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-ExecStartPre=-/usr/local/bin/docker-compose \
+ExecStartPre=-/usr/bin/docker compose \
   --project-directory {{ minecraftserver_docker_working_directory }} \
   --file {{ minecraftserver_docker_compose_path }} \
   --project-name {{ minecraftserver_service_name }} \
   down \
   --remove-orphans
 
-ExecStartPre=/usr/local/bin/docker-compose \
+ExecStartPre=/usr/bin/docker compose \
   --project-directory {{ minecraftserver_docker_working_directory }} \
   --file {{ minecraftserver_docker_compose_path }} \
   --project-name {{ minecraftserver_service_name }} \
   pull
 
-ExecStart=/usr/local/bin/docker-compose \
+ExecStart=/usr/bin/docker compose \
   --project-directory {{ minecraftserver_docker_working_directory }} \
   --file {{ minecraftserver_docker_compose_path }} \
   --project-name {{ minecraftserver_service_name }} \
   up
 
-ExecStop=/usr/local/bin/docker-compose \
+ExecStop=/usr/bin/docker compose \
   --project-directory {{ minecraftserver_docker_working_directory }} \
   --file {{ minecraftserver_docker_compose_path }} \
   --project-name {{ minecraftserver_service_name }} \

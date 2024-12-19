@@ -1,12 +1,12 @@
 ---
 - name: Install minecraftserver
-  include: install.yml
+  include_tasks: install.yml
   when: >
     minecraftserver_state is not defined
     or minecraftserver_state == 'present'
 
 - name: Remove minecraftserver
-  include: remove.yml
+  include_tasks: remove.yml
   when: >
     minecraftserver_state is defined
     and minecraftserver_state == 'absent'
