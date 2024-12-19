@@ -24,16 +24,16 @@ I'm using [itzg's docker image](https://github.com/itzg/docker-minecraft-server)
 
 ## Role parameters
 
-| Variable      | Type | Mandatory? | Default | Description           |
-|---------------|------|------------|---------|-----------------------|
-| minecraftserver_state         | text | no | `'present'` | If `absent` removes the docker configuration and systemd service |
-| minecraftserver_image_version | text | no | `'latest'`  | itzg's Docker image version |
-| minecraftserver_version       | text | no | `''`        | Minecraft Server version (e.g. `1.16.5`, default: latest version will be downloaded) |
-| minecraftserver_interface     | text | no | `0.0.0.0`   | Mapped network interface |
-| minecraftserver_port          | text | no | `25565`     | Mapped network port |
-| minecraftserver_data_volume_directory | text | no | `/srv/minecraftserver/minecraft-data` | Location of your data volume directory |
-| minecraftserver_environment           | key-value map | no | `{}` | Specifies the environment for the docker image (See [itzg's documentation](https://github.com/itzg/docker-minecraft-server)) |
-| minecraftserver_force_remove          | boolean | no | `false`    | Only for state `absent`: Specifies if your data volume directory will be deleted on when uninstalling |
+| Variable                              | Type          | Mandatory? | Default                               | Description                                                                                                                  |
+|---------------------------------------|---------------|------------|---------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| minecraftserver_state                 | text          | no         | `'present'`                           | If `absent` removes the docker configuration and systemd service                                                             |
+| minecraftserver_image_version         | text          | no         | `'latest'`                            | itzg's Docker image version                                                                                                  |
+| minecraftserver_version               | text          | no         | `''`                                  | Minecraft Server version (e.g. `1.16.5`, default: latest version will be downloaded)                                         |
+| minecraftserver_interface             | text          | no         | `0.0.0.0`                             | Mapped network interface                                                                                                     |
+| minecraftserver_port                  | text          | no         | `25565`                               | Mapped network port                                                                                                          |
+| minecraftserver_data_volume_directory | text          | no         | `/srv/minecraftserver/minecraft-data` | Location of your data volume directory                                                                                       |
+| minecraftserver_environment           | key-value map | no         | `{}`                                  | Specifies the environment for the docker image (See [itzg's documentation](https://github.com/itzg/docker-minecraft-server)) |
+| minecraftserver_force_remove          | boolean       | no         | `false`                               | Only for state `absent`: Specifies if your data volume directory will be deleted on when uninstalling                        |
 
 ## Example Playbook
 
@@ -99,7 +99,7 @@ molecule test -s vagrant-default && molecule test -s vagrant-all-parameters && m
 ```
 
 I recommend to use [pyenv](https://github.com/pyenv/pyenv) for local testing.
-Within the Github Actions pipeline I use [my own molecule Docker image](https://github.com/borisskert/docker-molecule).
+Within the GitHub Actions pipeline I use [my own molecule action](https://github.com/borisskert/molecule-action).
 
 ## License
 

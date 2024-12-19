@@ -1,8 +1,16 @@
 ---
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
   become: true
+
+  pre_tasks:
+    - name: Install netcat on Debian-based systems (to test open ports)
+      package:
+        name: netcat-traditional
+        state: present
+        update_cache: true
+      when: ansible_distribution == 'Debian'
 
   tasks:
     - name: Should template docker-compose file
@@ -14,14 +22,13 @@
       vars:
         expected_content: |
           ---
-          version: "3.2"
           services:
             minecraftserver:
-              image: itzg/minecraft-server:2021.14.0
+              image: itzg/minecraft-server:2024.12.0
               container_name: minecraft-server
               environment:
                 EULA: "TRUE"
-                VERSION: "1.16.5"
+                VERSION: "1.21.4"
                 SEED: "1785852800490497919"
                 VIEW_DISTANCE: "10"
                 MODE: "creative"
@@ -49,26 +56,26 @@
           Requires=docker.service
 
           [Service]
-          ExecStartPre=-/usr/local/bin/docker-compose \
+          ExecStartPre=-/usr/bin/docker compose \
             --project-directory /opt/minecraftserver/docker \
             --file /opt/minecraftserver/docker/docker-compose.yml \
             --project-name minecraftserver \
             down \
             --remove-orphans
 
-          ExecStartPre=/usr/local/bin/docker-compose \
+          ExecStartPre=/usr/bin/docker compose \
             --project-directory /opt/minecraftserver/docker \
             --file /opt/minecraftserver/docker/docker-compose.yml \
             --project-name minecraftserver \
             pull
 
-          ExecStart=/usr/local/bin/docker-compose \
+          ExecStart=/usr/bin/docker compose \
             --project-directory /opt/minecraftserver/docker \
             --file /opt/minecraftserver/docker/docker-compose.yml \
             --project-name minecraftserver \
             up
 
-          ExecStop=/usr/local/bin/docker-compose \
+          ExecStop=/usr/bin/docker compose \
             --project-directory /opt/minecraftserver/docker \
             --file /opt/minecraftserver/docker/docker-compose.yml \
             --project-name minecraftserver \
@@ -96,8 +103,11 @@
       register: netcat_tcp_25565
       retries: 300
       delay: 1
-      until: netcat_tcp_25565 is defined
-        and netcat_tcp_25565.rc == 0
+      until: netcat_tcp_25565 is defined and (
+        netcat_tcp_25565.rc == 0
+        or netcat_tcp_25565.rc == 2) # nc command not found
+      failed_when: netcat_tcp_25565 is defined
+        and netcat_tcp_25565.rc != 0
       when: not (
         molecule_docker_environment is defined
         and molecule_docker_environment | bool

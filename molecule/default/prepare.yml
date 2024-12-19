@@ -14,13 +14,3 @@
         molecule_docker_environment is defined
         and molecule_docker_environment | bool
         )
-
-    - name: Install docker-compose
-      include_role:
-        name: install-docker-compose
-      vars:
-        docker_compose_version: 1.29.1
-      when: not (
-        molecule_docker_environment is defined
-        and molecule_docker_environment | bool
-        )
